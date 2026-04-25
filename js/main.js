@@ -17,7 +17,7 @@ gsap.registerPlugin(ScrollTrigger);
       trigger: "#hero",
       start: "top top",
       end: "bottom bottom",
-      scrub: 1.5, // Add a 1.5-second smooth catch-up lag
+      scrub: 1, // Add a 1-second smooth catch-up lag
       onUpdate: (self) => {
         if (video.duration) {
           // Wrap in try-catch and requestAnimationFrame for smoother performance
