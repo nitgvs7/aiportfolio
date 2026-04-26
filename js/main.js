@@ -2,7 +2,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Initialize Lenis for smooth scrolling
 const lenis = new Lenis({
-  duration: 1.2,
+  duration: 1.6,
+  lerp: 0.08,
+  smoothWheel: true,
+  wheelMultiplier: 0.8,
   easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
 });
 lenis.on('scroll', ScrollTrigger.update);
@@ -11,53 +14,92 @@ gsap.ticker.add((time) => {
 });
 gsap.ticker.lagSmoothing(0);
 
-// Hero: scroll-driven video playback
-(function initHeroVideo() {
-  const video = document.getElementById("hero-video");
-  if (!video) return;
-  
-  let isSetup = false;
-  const setupVideoScroll = () => {
-    if (isSetup) return;
-    if (!video.duration || isNaN(video.duration)) return;
-    isSetup = true;
-    
-    video.pause(); // Ensure it's not playing normally
-    
-    ScrollTrigger.create({
-      trigger: "#hero",
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 1, // Add a 1-second smooth catch-up lag
-      onUpdate: (self) => {
-        if (video.duration) {
-          // Wrap in try-catch and requestAnimationFrame for smoother performance
-          requestAnimationFrame(() => {
-            try {
-              // Play 100% of the video duration across the scroll
-              video.currentTime = self.progress * video.duration;
-            } catch(e) {}
-          });
-        }
-      },
-    });
+// Hero: Canvas image sequence scroll scrubbing
+(function initHeroCanvas() {
+  const canvas = document.getElementById("hero-canvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+
+  const FRAME_COUNT = 145;
+  const FRAME_PATH = (i) => `assets/hero-sequence/frame_${String(i).padStart(4, "0")}.jpg`;
+
+  // Draw image to canvas with "object-fit: cover" behavior
+  const drawCover = (img) => {
+    const cW = canvas.width, cH = canvas.height;
+    const iW = img.naturalWidth, iH = img.naturalHeight;
+    const scale = Math.max(cW / iW, cH / iH);
+    const sW = iW * scale, sH = iH * scale;
+    const sx = (cW - sW) / 2, sy = (cH - sH) / 2;
+    ctx.drawImage(img, sx, sy, sW, sH);
   };
 
-  // Try to set up immediately or wait for events
-  if (video.readyState >= 1 && video.duration) {
-    setupVideoScroll();
-  } else {
-    video.addEventListener("loadedmetadata", setupVideoScroll);
-    video.addEventListener("canplay", setupVideoScroll);
-  }
-  
-  // Kickstart video to bypass some browser autoplay policies
-  setTimeout(() => {
-    let playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => { video.pause(); setupVideoScroll(); }).catch(() => {});
+  // Size canvas to fill viewport
+  const resize = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    if (images[currentFrame]?.complete) {
+      drawCover(images[currentFrame]);
     }
-  }, 100);
+  };
+  window.addEventListener("resize", resize);
+
+  // Preload all frames
+  let loadedCount = 0;
+  let currentFrame = 0;
+  let firstFrameDrawn = false;
+  const images = new Array(FRAME_COUNT);
+
+  const drawFirstFrame = () => {
+    if (firstFrameDrawn) return;
+    if (!images[0]?.complete) return;
+    firstFrameDrawn = true;
+    resize();
+    drawCover(images[0]);
+  };
+
+  const onFrameLoad = function() {
+    loadedCount++;
+    // Try to draw frame 0 whenever any image loads (in case frame 0 is now ready)
+    drawFirstFrame();
+    // Once all frames are loaded, set up ScrollTrigger
+    if (loadedCount === FRAME_COUNT) {
+      drawFirstFrame(); // Ensure first frame is visible
+      setupScrollScrub();
+    }
+  };
+
+  for (let i = 0; i < FRAME_COUNT; i++) {
+    images[i] = new Image();
+    images[i].onload = onFrameLoad;
+    images[i].src = FRAME_PATH(i + 1);
+  }
+
+  resize();
+
+  function setupScrollScrub() {
+    const render = (progress) => {
+      const frameIndex = Math.min(
+        FRAME_COUNT - 1,
+        Math.floor(progress * FRAME_COUNT)
+      );
+      if (frameIndex !== currentFrame) {
+        currentFrame = frameIndex;
+        drawCover(images[currentFrame]);
+      }
+    };
+
+    gsap.to({ progress: 0 }, {
+      progress: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.5,
+        onUpdate: (self) => render(self.progress),
+      },
+    });
+  }
 
   // Fade hero content on scroll
   gsap.to(".hero__content", {
@@ -68,8 +110,8 @@ gsap.ticker.lagSmoothing(0);
   // Un-fix hero elements when leaving hero section
   ScrollTrigger.create({
     trigger: "#hero", start: "top top", end: "bottom bottom",
-    onLeave: () => gsap.set([".hero__video",".hero__overlay",".hero__content"], { position: "absolute", top: "auto", bottom: 0 }),
-    onEnterBack: () => gsap.set([".hero__video",".hero__overlay",".hero__content"], { position: "fixed", top: 0, bottom: "auto" }),
+    onLeave: () => gsap.set(["#hero-canvas", ".hero__overlay", ".hero__content"], { position: "absolute", top: "auto", bottom: 0 }),
+    onEnterBack: () => gsap.set(["#hero-canvas", ".hero__overlay", ".hero__content"], { position: "fixed", top: 0, bottom: "auto" }),
   });
 })();
 

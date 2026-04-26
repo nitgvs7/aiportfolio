@@ -13,7 +13,7 @@
 <body>
   <!-- HERO -->
   <section id="hero" class="hero">
-    <video id="hero-video" class="hero__video" src="assets/bg_hero_anite.mp4" muted playsinline preload="auto"></video>
+    <canvas id="hero-canvas" class="hero__video"></canvas>
     
     <div class="hero__overlay"></div>
     <div class="hero__content">
@@ -38,8 +38,15 @@
     
     <!-- PROJECT 2 -->
     <article class="project-card" id="project-2">
-      <div class="project-card__video-wrap">
-        <iframe src="https://play.gumlet.io/embed/69eca63d80df8787f2c6d1a2?color=cca53d" title="Project 2" loading="lazy" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen; clipboard-write" allowfullscreen></iframe>
+      <div class="project-card__video-wrap" style="padding-top: 0; aspect-ratio: 43/24;">
+        <iframe
+            loading="lazy" title="Gumlet video player"
+            src="https://play.gumlet.io/embed/69edc7524779ed7c8b7511db"
+            style="border:none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+            referrerpolicy="origin"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen;clipboard-write;"
+            allowfullscreen>
+        </iframe>
       </div>
       <div class="project-card__info">
         <h3 class="project-card__title">Ai Editing Effects</h3>
