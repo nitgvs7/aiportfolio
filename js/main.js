@@ -1,5 +1,16 @@
 gsap.registerPlugin(ScrollTrigger);
 
+// Initialize Lenis for smooth scrolling
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+});
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => {
+  lenis.raf(time * 1000);
+});
+gsap.ticker.lagSmoothing(0);
+
 // Hero: scroll-driven video playback
 (function initHeroVideo() {
   const video = document.getElementById("hero-video");
@@ -68,6 +79,34 @@ gsap.utils.toArray(".project-card").forEach((card) => {
     opacity: 1, y: 0, duration: 1, ease: "power3.out",
     scrollTrigger: { trigger: card, start: "top 85%", toggleActions: "play none none none" },
   });
+
+  // Magnetic & 3D tilt effect for the video cards
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    
+    gsap.to(card, {
+      x: x * 0.05, // Subtle magnetic pull
+      y: y * 0.05,
+      rotationY: x * 0.015, // Slight 3D tilt
+      rotationX: -y * 0.015,
+      duration: 0.3,
+      ease: "power2.out",
+      transformPerspective: 1000
+    });
+  });
+
+  card.addEventListener('mouseleave', () => {
+    gsap.to(card, {
+      x: 0,
+      y: 0,
+      rotationY: 0,
+      rotationX: 0,
+      duration: 0.6,
+      ease: "elastic.out(1, 0.3)"
+    });
+  });
 });
 
 // CTA reveal
@@ -79,3 +118,31 @@ gsap.from(".cta__button", {
   autoAlpha: 0, scale: 0.9, duration: 0.6, delay: 0.2, ease: "back.out(1.7)",
   scrollTrigger: { trigger: ".cta", start: "top 75%", toggleActions: "play none none none" },
 });
+
+// Magnetic CTA Button
+const ctaButton = document.querySelector('.cta__button');
+if (ctaButton) {
+  ctaButton.addEventListener('mousemove', (e) => {
+    const rect = ctaButton.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    
+    gsap.to(ctaButton, {
+      x: x * 0.4,
+      y: y * 0.4,
+      scale: 1.05,
+      duration: 0.3,
+      ease: "power2.out"
+    });
+  });
+
+  ctaButton.addEventListener('mouseleave', () => {
+    gsap.to(ctaButton, {
+      x: 0,
+      y: 0,
+      scale: 1,
+      duration: 0.6,
+      ease: "elastic.out(1, 0.3)"
+    });
+  });
+}
