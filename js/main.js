@@ -14,15 +14,15 @@ gsap.ticker.add((time) => {
 });
 gsap.ticker.lagSmoothing(0);
 
-// Hero: Canvas image sequence scroll scrubbing
+// Hero: Canvas image sequence scroll scrubbing (24fps, 145 frames)
 (function initHeroCanvas() {
   const canvas = document.getElementById("hero-canvas");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
 
-  const FRAME_COUNT = 73;
-  const CDN_BASE = "https://cdn.jsdelivr.net/gh/nitgvs7/aiportfolio@main/assets/hero-sequence";
-  const FRAME_PATH = (i) => `${CDN_BASE}/frame_${String(i).padStart(4, "0")}.webp`;
+  const FRAME_COUNT = 100;
+  const ASSETS_BASE = "assets/hero-sequence";
+  const FRAME_PATH = (i) => `${ASSETS_BASE}/frame_${String(i).padStart(4, "0")}.webp`;
 
   // Draw image to canvas with "object-fit: cover" behavior
   const drawCover = (img) => {
@@ -44,7 +44,6 @@ gsap.ticker.lagSmoothing(0);
   };
   window.addEventListener("resize", resize);
 
-  // Preload all frames
   let currentFrame = 0;
   let scrollReady = false;
   const images = new Array(FRAME_COUNT);
@@ -54,28 +53,51 @@ gsap.ticker.lagSmoothing(0);
     if (!loaded[0]) return;
     resize();
     drawCover(images[0]);
-    // Set up scroll scrubbing as soon as the first frame is drawn
     if (!scrollReady) {
       scrollReady = true;
       setupScrollScrub();
     }
   };
 
-  const onFrameLoad = function(index) {
+  const onFrameLoad = (index) => {
     loaded[index] = true;
     if (index === 0) drawFirstFrame();
   };
 
-  for (let i = 0; i < FRAME_COUNT; i++) {
+  // Progressive loading: prioritize first 10 frames, then batch the rest
+  const PRIORITY_COUNT = 10;
+  const BATCH_SIZE = 20;
+
+  const loadFrame = (i) => {
     images[i] = new Image();
     images[i].onload = () => onFrameLoad(i);
     images[i].src = FRAME_PATH(i + 1);
+  };
+
+  // Phase 1: Load priority frames immediately
+  for (let i = 0; i < Math.min(PRIORITY_COUNT, FRAME_COUNT); i++) {
+    loadFrame(i);
   }
+
+  // Phase 2: Load remaining frames in batches to avoid network congestion
+  let batchStart = PRIORITY_COUNT;
+  const loadNextBatch = () => {
+    if (batchStart >= FRAME_COUNT) return;
+    const end = Math.min(batchStart + BATCH_SIZE, FRAME_COUNT);
+    for (let i = batchStart; i < end; i++) {
+      loadFrame(i);
+    }
+    batchStart = end;
+    if (batchStart < FRAME_COUNT) {
+      requestAnimationFrame(loadNextBatch);
+    }
+  };
+  // Start batch loading after priority frames begin arriving
+  requestAnimationFrame(loadNextBatch);
 
   resize();
 
   function setupScrollScrub() {
-    // Find the nearest loaded frame to the target
     const findNearest = (target) => {
       if (loaded[target]) return target;
       for (let d = 1; d < FRAME_COUNT; d++) {
@@ -145,7 +167,7 @@ if (ctaButton) {
     const rect = ctaButton.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    
+
     gsap.to(ctaButton, {
       x: x * 0.4,
       y: y * 0.4,
