@@ -132,11 +132,7 @@ gsap.utils.toArray(".project-card").forEach((card) => {
   });
 });
 
-// CTA reveal
-gsap.from(".cta__title", {
-  autoAlpha: 0, y: 40, duration: 0.8, ease: "power2.out",
-  scrollTrigger: { trigger: ".cta", start: "top 80%", toggleActions: "play none none none" },
-});
+// CTA button reveal
 gsap.from(".cta__button", {
   autoAlpha: 0, scale: 0.9, duration: 0.6, delay: 0.2, ease: "back.out(1.7)",
   scrollTrigger: { trigger: ".cta", start: "top 75%", toggleActions: "play none none none" },
