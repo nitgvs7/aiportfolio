@@ -20,8 +20,9 @@ gsap.ticker.lagSmoothing(0);
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
 
-  const FRAME_COUNT = 145;
-  const FRAME_PATH = (i) => `assets/hero-sequence/frame_${String(i).padStart(4, "0")}.jpg`;
+  const FRAME_COUNT = 73;
+  const CDN_BASE = "https://cdn.jsdelivr.net/gh/nitgvs7/aiportfolio@main/assets/hero-sequence";
+  const FRAME_PATH = (i) => `${CDN_BASE}/frame_${String(i).padStart(4, "0")}.webp`;
 
   // Draw image to canvas with "object-fit: cover" behavior
   const drawCover = (img) => {
@@ -44,44 +45,52 @@ gsap.ticker.lagSmoothing(0);
   window.addEventListener("resize", resize);
 
   // Preload all frames
-  let loadedCount = 0;
   let currentFrame = 0;
-  let firstFrameDrawn = false;
+  let scrollReady = false;
   const images = new Array(FRAME_COUNT);
+  const loaded = new Array(FRAME_COUNT).fill(false);
 
   const drawFirstFrame = () => {
-    if (firstFrameDrawn) return;
-    if (!images[0]?.complete) return;
-    firstFrameDrawn = true;
+    if (!loaded[0]) return;
     resize();
     drawCover(images[0]);
-  };
-
-  const onFrameLoad = function() {
-    loadedCount++;
-    // Try to draw frame 0 whenever any image loads (in case frame 0 is now ready)
-    drawFirstFrame();
-    // Once all frames are loaded, set up ScrollTrigger
-    if (loadedCount === FRAME_COUNT) {
-      drawFirstFrame(); // Ensure first frame is visible
+    // Set up scroll scrubbing as soon as the first frame is drawn
+    if (!scrollReady) {
+      scrollReady = true;
       setupScrollScrub();
     }
   };
 
+  const onFrameLoad = function(index) {
+    loaded[index] = true;
+    if (index === 0) drawFirstFrame();
+  };
+
   for (let i = 0; i < FRAME_COUNT; i++) {
     images[i] = new Image();
-    images[i].onload = onFrameLoad;
+    images[i].onload = () => onFrameLoad(i);
     images[i].src = FRAME_PATH(i + 1);
   }
 
   resize();
 
   function setupScrollScrub() {
+    // Find the nearest loaded frame to the target
+    const findNearest = (target) => {
+      if (loaded[target]) return target;
+      for (let d = 1; d < FRAME_COUNT; d++) {
+        if (target - d >= 0 && loaded[target - d]) return target - d;
+        if (target + d < FRAME_COUNT && loaded[target + d]) return target + d;
+      }
+      return 0;
+    };
+
     const render = (progress) => {
-      const frameIndex = Math.min(
+      const targetFrame = Math.min(
         FRAME_COUNT - 1,
         Math.floor(progress * FRAME_COUNT)
       );
+      const frameIndex = findNearest(targetFrame);
       if (frameIndex !== currentFrame) {
         currentFrame = frameIndex;
         drawCover(images[currentFrame]);
