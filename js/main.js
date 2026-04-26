@@ -79,34 +79,6 @@ gsap.utils.toArray(".project-card").forEach((card) => {
     opacity: 1, y: 0, duration: 1, ease: "power3.out",
     scrollTrigger: { trigger: card, start: "top 85%", toggleActions: "play none none none" },
   });
-
-  // Magnetic & 3D tilt effect for the video cards
-  card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    
-    gsap.to(card, {
-      x: x * 0.05, // Subtle magnetic pull
-      y: y * 0.05,
-      rotationY: x * 0.015, // Slight 3D tilt
-      rotationX: -y * 0.015,
-      duration: 0.3,
-      ease: "power2.out",
-      transformPerspective: 1000
-    });
-  });
-
-  card.addEventListener('mouseleave', () => {
-    gsap.to(card, {
-      x: 0,
-      y: 0,
-      rotationY: 0,
-      rotationX: 0,
-      duration: 0.6,
-      ease: "elastic.out(1, 0.3)"
-    });
-  });
 });
 
 // CTA reveal
