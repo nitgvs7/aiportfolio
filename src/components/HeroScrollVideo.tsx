@@ -12,6 +12,10 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const FALLBACK_DURATION = 2.79;
 const FRAME_RATE = 24;
+const HERO_VIDEO_SRC = "/hero-video-scrub.mp4";
+const SEEK_FPS = 36;
+const SEEK_INTERVAL_MS = 1000 / SEEK_FPS;
+const SEEK_EPSILON = 1 / 72;
 
 export function HeroScrollVideo() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -29,25 +33,37 @@ export function HeroScrollVideo() {
       return;
     }
 
-    const onMetadata = () => {
+    const updateDuration = () => {
       durationRef.current = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : FALLBACK_DURATION;
       video.pause();
       video.currentTime = 0;
+    };
+
+    const onMetadata = () => {
+      updateDuration();
+    };
+
+    const onLoadedData = () => {
+      updateDuration();
       setVideoReady(true);
     };
 
     const onError = () => setVideoFailed(true);
 
     video.addEventListener("loadedmetadata", onMetadata);
+    video.addEventListener("loadeddata", onLoadedData);
     video.addEventListener("error", onError);
     video.load();
 
-    if (video.readyState >= 1) {
-      onMetadata();
+    if (video.readyState >= 2) {
+      onLoadedData();
+    } else if (video.readyState >= 1) {
+      updateDuration();
     }
 
     return () => {
       video.removeEventListener("loadedmetadata", onMetadata);
+      video.removeEventListener("loadeddata", onLoadedData);
       video.removeEventListener("error", onError);
     };
   }, []);
@@ -66,6 +82,10 @@ export function HeroScrollVideo() {
       const maxTime = Math.max(0, duration - 0.04);
       const totalFrames = Math.max(1, Math.round(duration * FRAME_RATE));
       let targetTime = 0;
+      let displayedTime = 0;
+      let lastSeekTime = -1;
+      let lastSeekAt = 0;
+      let hasFailed = false;
 
       const updateReadout = (progress: number) => {
         const frame = Math.round(progress * totalFrames);
@@ -88,20 +108,44 @@ export function HeroScrollVideo() {
         return;
       }
 
-      const tick = () => {
-        const current = video.currentTime || 0;
-        const diff = targetTime - current;
+      const seekVideo = (time: number) => {
+        const clampedTime = Math.max(0, Math.min(maxTime, time));
 
-        if (Math.abs(diff) < 0.003) {
+        if (Math.abs(clampedTime - lastSeekTime) < SEEK_EPSILON) {
           return;
         }
 
-        const next = Math.abs(diff) < 0.02 ? targetTime : current + diff * 0.26;
         try {
-          video.currentTime = Math.max(0, Math.min(maxTime, next));
+          video.currentTime = clampedTime;
+          lastSeekTime = clampedTime;
+          lastSeekAt = performance.now();
         } catch {
-          setVideoFailed(true);
+          if (!hasFailed) {
+            hasFailed = true;
+            setVideoFailed(true);
+          }
         }
+      };
+
+      const tick = () => {
+        const now = performance.now();
+        const diff = targetTime - displayedTime;
+
+        if (Math.abs(diff) < 0.001) {
+          displayedTime = targetTime;
+        } else {
+          displayedTime += diff * 0.22;
+        }
+
+        if (now - lastSeekAt < SEEK_INTERVAL_MS && Math.abs(targetTime - lastSeekTime) < SEEK_EPSILON * 4) {
+          return;
+        }
+
+        if (video.seeking && Math.abs(targetTime - lastSeekTime) < SEEK_EPSILON * 6) {
+          return;
+        }
+
+        seekVideo(Math.abs(diff) < 0.02 ? targetTime : displayedTime);
       };
 
       gsap.ticker.add(tick);
@@ -117,6 +161,11 @@ export function HeroScrollVideo() {
           updateReadout(self.progress);
         },
       });
+
+      targetTime = scrubTrigger.progress * maxTime;
+      displayedTime = targetTime;
+      updateReadout(scrubTrigger.progress);
+      seekVideo(targetTime);
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -174,6 +223,7 @@ export function HeroScrollVideo() {
               poster="/hero-poster.jpg"
               aria-label="Scroll-controlled hero video preview"
             >
+              <source src={HERO_VIDEO_SRC} type="video/mp4" />
               <source src="/hero-video.mp4" type="video/mp4" />
             </video>
           )}
@@ -194,7 +244,6 @@ export function HeroScrollVideo() {
 
         <div className="hero-copy absolute inset-x-0 bottom-10 z-10 mx-auto max-w-7xl px-5 md:bottom-12 md:px-8">
           <div className="max-w-5xl">
-            <p className="mb-4 font-mono text-xs uppercase text-[#ffcf92] md:mb-5">Scroll to direct</p>
             <h1 className="max-w-5xl text-6xl font-black leading-[0.9] text-white sm:text-7xl md:text-8xl lg:text-[9rem]">
               <span className="block">AI Video Editor</span>
               <span className="block text-outline">Anite</span>

@@ -10,8 +10,7 @@ export function ContactSection() {
         </div>
         <div className="relative z-10 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div data-reveal>
-            <p className="font-mono text-xs uppercase text-[#ffcf92]">Final frame</p>
-            <h2 className="mt-4 max-w-4xl text-5xl font-black leading-[0.96] text-white md:text-7xl">
+            <h2 className="max-w-4xl text-5xl font-black leading-[0.96] text-white md:text-7xl">
               Let&apos;s build your next AI video.
             </h2>
           </div>

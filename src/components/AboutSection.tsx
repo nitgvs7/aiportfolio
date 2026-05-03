@@ -14,10 +14,6 @@ export function AboutSection() {
             className="object-cover object-[54%_32%] saturate-[0.92]"
           />
           <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,6,0.02),rgba(3,4,6,0.82)),radial-gradient(circle_at_68%_18%,rgba(255,179,92,0.18),transparent_24rem)]" />
-          <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl border border-white/[0.12] bg-black/[0.34] px-4 py-3 font-mono text-[10px] uppercase text-white/[0.54] backdrop-blur-xl">
-            <span>Portrait study</span>
-            <span>AI edit direction</span>
-          </div>
         </div>
 
         <div className="space-y-6">
@@ -46,19 +42,6 @@ export function AboutSection() {
               ))}
             </div>
           </GlassPanel>
-
-          <div data-reveal className="relative overflow-hidden rounded-[28px] border border-white/[0.12] bg-white/[0.04] p-4">
-            <div className="relative h-64 overflow-hidden rounded-[22px] md:h-80">
-              <Image
-                src="/anite-photo-alt.jpeg"
-                alt="Anite in an urban setting"
-                fill
-                sizes="(max-width: 1024px) 100vw, 46vw"
-                className="object-cover object-[48%_28%] saturate-[0.9]"
-              />
-              <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,4,6,0.72),transparent_62%)]" />
-            </div>
-          </div>
         </div>
       </div>
     </section>
