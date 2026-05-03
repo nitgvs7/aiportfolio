@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { MagneticButton } from "@/components/MagneticButton";
+import { SectionDivider } from "@/components/SectionDivider";
 
 export function ContactSection() {
   return (
-    <section id="contact" className="relative overflow-hidden px-5 py-24 md:px-8 md:py-32">
+    <section id="contact" className="relative overflow-hidden px-5 py-20 md:px-8 md:py-24">
+      <SectionDivider />
       <div className="ambient-sweep mx-auto max-w-7xl overflow-hidden rounded-[34px] border border-white/[0.14] bg-[linear-gradient(135deg,rgba(10,14,23,0.94),rgba(5,6,9,0.98))] px-5 py-16 md:rounded-[44px] md:px-12 md:py-24">
         <div aria-hidden="true" className="absolute -right-8 -top-12 h-72 w-72 opacity-[0.055]">
           <Image src="/anite-logo.png" alt="" fill sizes="288px" className="object-contain invert" />

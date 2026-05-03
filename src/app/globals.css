@@ -136,10 +136,6 @@ a {
   background-size: 68px 68px;
 }
 
-.soft-mask {
-  mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
-}
-
 .text-outline {
   color: transparent;
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.34);
@@ -198,7 +194,7 @@ a {
   }
 
   .hero-media {
-    object-position: 60% 50%;
+    object-position: 50% 50%;
   }
 
   .hero-title {

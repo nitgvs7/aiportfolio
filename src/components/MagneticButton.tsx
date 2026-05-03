@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 type MagneticButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   children: ReactNode;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary";
 };
 
 const variants = {
@@ -13,7 +13,6 @@ const variants = {
     "border-transparent bg-[linear-gradient(135deg,#f8d49a,#ff9f52)] text-[#071018] shadow-[0_18px_60px_rgba(255,179,92,0.26)] hover:shadow-[0_20px_70px_rgba(255,179,92,0.38)]",
   secondary:
     "border-white/[0.16] bg-white/[0.08] text-white backdrop-blur-xl hover:border-white/[0.30] hover:bg-white/[0.12]",
-  ghost: "border-white/[0.12] bg-transparent text-white/[0.82] hover:border-white/[0.26] hover:bg-white/[0.08]",
 };
 
 export function MagneticButton({

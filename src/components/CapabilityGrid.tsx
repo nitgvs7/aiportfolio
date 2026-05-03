@@ -1,13 +1,11 @@
 import { capabilities, capabilityTags } from "@/lib/portfolio-data";
 import { GlassPanel } from "@/components/GlassPanel";
+import { SectionDivider } from "@/components/SectionDivider";
 
 export function CapabilityGrid() {
   return (
-    <section id="capabilities" className="relative overflow-hidden px-5 py-24 md:px-8 md:py-32">
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(122,200,255,0.35),rgba(255,179,92,0.35),transparent)]"
-      />
+    <section id="capabilities" className="relative overflow-hidden px-5 py-20 md:px-8 md:py-24">
+      <SectionDivider />
       <div className="mx-auto max-w-7xl">
         <div data-reveal className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
           <div>

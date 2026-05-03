@@ -1,8 +1,10 @@
 import { processSteps } from "@/lib/portfolio-data";
+import { SectionDivider } from "@/components/SectionDivider";
 
 export function ProcessTimeline() {
   return (
-    <section id="process" className="relative px-5 py-24 md:px-8 md:py-32">
+    <section id="process" className="relative px-5 py-20 md:px-8 md:py-24">
+      <SectionDivider />
       <div className="mx-auto max-w-7xl">
         <div data-reveal className="mb-12 grid gap-6 md:grid-cols-[0.8fr_1.2fr] md:items-end">
           <div>
