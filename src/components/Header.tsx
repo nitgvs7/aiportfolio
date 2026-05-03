@@ -17,7 +17,7 @@ export function Header() {
 
         <nav
           aria-label="Primary navigation"
-          className="glass-panel hidden items-center gap-1 rounded-full p-1 sm:flex"
+          className="site-nav glass-panel hidden items-center gap-1 rounded-full p-1 sm:flex"
         >
           {navItems.map((item) => (
             <a
