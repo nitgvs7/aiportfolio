@@ -34,14 +34,6 @@ export const projects = [
 
 export const capabilities = [
   {
-    title: "AI video editing",
-    detail: "Scene flow, shot choices, transitions, speed ramps, and final cut polish.",
-  },
-  {
-    title: "Image-to-video workflows",
-    detail: "Generated stills transformed into controlled motion, camera language, and atmosphere.",
-  },
-  {
     title: "Real estate promo videos",
     detail: "Cinematic property stories, luxury framing, spatial mood, and fast-scroll retention.",
   },
