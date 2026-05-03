@@ -8,27 +8,27 @@ export const navItems = [
 export const projects = [
   {
     code: "01",
-    title: "Synthetic Estate Film",
-    description: "Architectural atmosphere, polished pacing, and impossible-light real estate storytelling.",
+    title: "Neurabud AI Ad",
+    description: "A polished AI commercial for Neurabud, shaped around clear product storytelling and cinematic pacing.",
     src: "https://play.gumlet.io/embed/69eca0f64779ed7c8b61bc47",
     aspectRatio: "241 / 134",
-    meta: ["AI Commercial", "Real Estate Visual"],
+    meta: ["AI Ad", "Brand Promo"],
   },
   {
     code: "02",
-    title: "Product Reality Cut",
-    description: "A tactile product edit shaped with generative motion, clean rhythm, and premium finish.",
+    title: "Prompted VFX Experiments",
+    description: "Special VFX effects created through prompt-led generation, compositing, and controlled visual direction.",
     src: "https://play.gumlet.io/embed/69edc7524779ed7c8b7511db",
     aspectRatio: "43 / 24",
-    meta: ["Product Visual", "Motion Edit"],
+    meta: ["VFX Effects", "Prompt Direction"],
   },
   {
     code: "03",
-    title: "Cinematic AI Reel",
-    description: "High-energy brand imagery built for attention, retention, and cinematic social delivery.",
+    title: "AI Agents Day Promo",
+    description: "A promotional film for Agents Day, the Lisbon event focused on building with AI agents.",
     src: "https://play.gumlet.io/embed/69ec9c4651e0355695cf8c86",
     aspectRatio: "16 / 9",
-    meta: ["Brand Film", "AI Reel"],
+    meta: ["Event Promo", "AI Agents"],
   },
 ] as const;
 
@@ -46,24 +46,8 @@ export const capabilities = [
     detail: "Cinematic property stories, luxury framing, spatial mood, and fast-scroll retention.",
   },
   {
-    title: "Product visuals",
-    detail: "Hero shots, macro details, launch edits, and unreal-but-believable presentation.",
-  },
-  {
     title: "Social media reels",
     detail: "Punchy vertical edits built around hooks, pacing, captions, and platform attention.",
-  },
-  {
-    title: "Brand storytelling",
-    detail: "Visual systems, narrative beats, moodboards, and edits that feel distinct.",
-  },
-  {
-    title: "Music video concepts",
-    detail: "Surreal treatments, visual worlds, performance energy, and rhythmic cuts.",
-  },
-  {
-    title: "Cinematic motion design",
-    detail: "Light, texture, camera movement, composition, and editorial graphic details.",
   },
   {
     title: "Prompt direction",
@@ -99,13 +83,13 @@ export const processSteps = [
 ] as const;
 
 export const capabilityTags = [
+  "Seedance 2.0",
+  "Kling 3.0",
   "Runway",
-  "Kling",
   "Midjourney",
-  "ComfyUI",
+  "Grok Imagine",
+  "Nano-banana 2.0",
   "Premiere",
-  "After Effects",
   "Sound pacing",
   "Prompt systems",
-  "Brand rhythm",
 ] as const;
