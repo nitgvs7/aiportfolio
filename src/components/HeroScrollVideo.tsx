@@ -196,7 +196,7 @@ export function HeroScrollVideo() {
       className="relative h-[270vh] min-h-[1900px]"
       style={{ "--hero-progress": 0 } as CSSProperties}
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="hero-stage sticky top-0 overflow-hidden">
         <div aria-hidden="true" className="hero-grid-lines absolute inset-0 opacity-0" />
         <div
           aria-hidden="true"
@@ -211,12 +211,12 @@ export function HeroScrollVideo() {
               fill
               priority
               sizes="100vw"
-              className="object-cover"
+              className="hero-media object-cover"
             />
           ) : (
             <video
               ref={videoRef}
-              className="h-full w-full object-cover opacity-[0.82] saturate-[1.08]"
+              className="hero-media h-full w-full object-cover opacity-[0.82] saturate-[1.08]"
               muted
               playsInline
               preload="auto"
@@ -233,7 +233,7 @@ export function HeroScrollVideo() {
         </div>
 
         <div className="pointer-events-none absolute inset-x-0 top-20 z-10 mx-auto flex max-w-7xl items-center justify-between px-5 md:top-24 md:px-8">
-          <div className="rounded-full border border-white/[0.14] bg-black/[0.30] px-4 py-2 text-xs font-medium text-white/[0.72] backdrop-blur-xl">
+          <div className="hidden rounded-full border border-white/[0.14] bg-black/[0.30] px-4 py-2 text-xs font-medium text-white/[0.72] backdrop-blur-xl sm:block">
             <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#61ffad] shadow-[0_0_18px_rgba(97,255,173,0.8)]" />
             Available for AI video projects
           </div>
@@ -242,14 +242,17 @@ export function HeroScrollVideo() {
           </div>
         </div>
 
-        <div className="hero-copy absolute inset-x-0 bottom-10 z-10 mx-auto max-w-7xl px-5 md:bottom-12 md:px-8">
+        <div className="hero-copy absolute inset-x-0 z-10 mx-auto max-w-7xl px-5 md:px-8">
           <div className="max-w-5xl">
-            <h1 className="max-w-5xl text-6xl font-black leading-[0.9] text-white sm:text-7xl md:text-8xl lg:text-[9rem]">
-              <span className="block">AI Video Editor</span>
-              <span className="block text-outline">Anite</span>
+            <h1 className="hero-title font-black text-white">
+              <span className="hidden sm:block">AI Video</span>
+              <span className="block sm:hidden">AI</span>
+              <span className="block sm:hidden">Video</span>
+              <span className="block">Editor</span>
+              <span className="hero-title-outline block text-outline">Anite</span>
             </h1>
-            <div className="mt-6 grid max-w-4xl gap-6 md:mt-8 md:grid-cols-[1fr_auto] md:items-end">
-              <p className="max-w-2xl text-base leading-7 text-white/[0.72] md:text-xl md:leading-8">
+            <div className="mt-5 grid max-w-4xl gap-5 md:mt-7 md:grid-cols-[1fr_auto] md:items-end">
+              <p className="hero-summary text-base leading-7 text-white/[0.72] md:text-lg md:leading-8 lg:text-xl">
                 Cinematic AI visuals, scroll-stopping reels, product films, music visuals, and brand stories built
                 with next-generation video workflows.
               </p>
@@ -262,7 +265,7 @@ export function HeroScrollVideo() {
                 </MagneticButton>
               </div>
             </div>
-            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-white/[0.54]">
+            <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-white/[0.54] md:mt-6">
               <a className="transition-colors hover:text-white" href="mailto:contact@anite.me">
                 contact@anite.me
               </a>
@@ -273,7 +276,7 @@ export function HeroScrollVideo() {
           </div>
         </div>
 
-        <div className="absolute bottom-6 right-5 z-10 flex items-end gap-3 md:bottom-8 md:right-8">
+        <div className="absolute bottom-6 right-5 z-10 hidden items-end gap-3 md:bottom-8 md:right-8 md:flex">
           <div className="glass-panel rounded-2xl px-4 py-3">
             <div className="mb-2 h-px w-24 bg-white/[0.14]">
               <div
