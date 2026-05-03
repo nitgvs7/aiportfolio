@@ -13,9 +13,9 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const FALLBACK_DURATION = 2.79;
 const FRAME_RATE = 24;
 const HERO_VIDEO_SRC = "/hero-video-scrub.mp4";
-const SEEK_FPS = 36;
+const SEEK_FPS = 30;
 const SEEK_INTERVAL_MS = 1000 / SEEK_FPS;
-const SEEK_EPSILON = 1 / 72;
+const SEEK_EPSILON = 1 / FRAME_RATE / 2;
 
 export function HeroScrollVideo() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -82,7 +82,6 @@ export function HeroScrollVideo() {
       const maxTime = Math.max(0, duration - 0.04);
       const totalFrames = Math.max(1, Math.round(duration * FRAME_RATE));
       let targetTime = 0;
-      let displayedTime = 0;
       let lastSeekTime = -1;
       let lastSeekAt = 0;
       let hasFailed = false;
@@ -108,8 +107,10 @@ export function HeroScrollVideo() {
         return;
       }
 
+      const snapToFrame = (time: number) => Math.round(time * FRAME_RATE) / FRAME_RATE;
+
       const seekVideo = (time: number) => {
-        const clampedTime = Math.max(0, Math.min(maxTime, time));
+        const clampedTime = Math.max(0, Math.min(maxTime, snapToFrame(time)));
 
         if (Math.abs(clampedTime - lastSeekTime) < SEEK_EPSILON) {
           return;
@@ -129,23 +130,16 @@ export function HeroScrollVideo() {
 
       const tick = () => {
         const now = performance.now();
-        const diff = targetTime - displayedTime;
 
-        if (Math.abs(diff) < 0.001) {
-          displayedTime = targetTime;
-        } else {
-          displayedTime += diff * 0.22;
-        }
-
-        if (now - lastSeekAt < SEEK_INTERVAL_MS && Math.abs(targetTime - lastSeekTime) < SEEK_EPSILON * 4) {
+        if (now - lastSeekAt < SEEK_INTERVAL_MS && Math.abs(targetTime - lastSeekTime) < SEEK_EPSILON * 2) {
           return;
         }
 
-        if (video.seeking && Math.abs(targetTime - lastSeekTime) < SEEK_EPSILON * 6) {
+        if (video.seeking && Math.abs(targetTime - lastSeekTime) < SEEK_EPSILON * 2) {
           return;
         }
 
-        seekVideo(Math.abs(diff) < 0.02 ? targetTime : displayedTime);
+        seekVideo(targetTime);
       };
 
       gsap.ticker.add(tick);
@@ -163,7 +157,6 @@ export function HeroScrollVideo() {
       });
 
       targetTime = scrubTrigger.progress * maxTime;
-      displayedTime = targetTime;
       updateReadout(scrubTrigger.progress);
       seekVideo(targetTime);
 
@@ -172,7 +165,7 @@ export function HeroScrollVideo() {
           trigger: section,
           start: "top top",
           end: "bottom bottom",
-          scrub: 1,
+          scrub: 0.45,
           refreshPriority: 1,
         },
       });
@@ -184,6 +177,8 @@ export function HeroScrollVideo() {
       return () => {
         gsap.ticker.remove(tick);
         scrubTrigger.kill();
+        tl.scrollTrigger?.kill();
+        tl.kill();
       };
     },
     { dependencies: [videoReady, videoFailed], scope: sectionRef },

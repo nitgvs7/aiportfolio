@@ -14,12 +14,13 @@ export function SmoothScroll() {
     }
 
     const lenis = new Lenis({
-      duration: 1.08,
+      duration: 0.72,
       easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 0.88,
+      wheelMultiplier: 0.92,
+      prevent: (node) => node.closest("[data-lenis-prevent]") !== null,
       anchors: {
-        duration: 1,
+        duration: 0.72,
         offset: -16,
       },
     });
