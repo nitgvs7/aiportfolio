@@ -1,9 +1,11 @@
 import { projects } from "@/lib/portfolio-data";
 import { ProjectCard } from "@/components/ProjectCard";
+import { SectionDivider } from "@/components/SectionDivider";
 
 export function ProjectGrid() {
   return (
-    <section id="work" className="relative px-5 py-24 md:px-8 md:py-32">
+    <section id="work" className="relative mt-12 px-5 pb-20 pt-14 md:mt-16 md:px-8 md:pb-24 md:pt-16">
+      <SectionDivider />
       <div className="mx-auto max-w-7xl">
         <div data-reveal className="mb-12 grid gap-6 md:grid-cols-[0.9fr_1.1fr] md:items-end">
           <div>

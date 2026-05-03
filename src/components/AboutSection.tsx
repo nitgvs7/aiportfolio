@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { GlassPanel } from "@/components/GlassPanel";
+import { SectionDivider } from "@/components/SectionDivider";
 
 export function AboutSection() {
   return (
-    <section id="about" className="relative px-5 py-24 md:px-8 md:py-32">
+    <section id="about" className="relative px-5 py-20 md:px-8 md:py-24">
+      <SectionDivider />
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div data-reveal className="relative min-h-[620px] overflow-hidden rounded-[34px] border border-white/[0.14] bg-[#080b11] md:min-h-[760px]">
           <Image

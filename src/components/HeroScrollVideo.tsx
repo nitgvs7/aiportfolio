@@ -227,11 +227,7 @@ export function HeroScrollVideo() {
           <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.7),transparent)]" />
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 top-20 z-10 mx-auto flex max-w-7xl items-center justify-between px-5 md:top-24 md:px-8">
-          <div className="hidden rounded-full border border-white/[0.14] bg-black/[0.30] px-4 py-2 text-xs font-medium text-white/[0.72] backdrop-blur-xl sm:block">
-            <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#61ffad] shadow-[0_0_18px_rgba(97,255,173,0.8)]" />
-            Available for AI video projects
-          </div>
+        <div className="pointer-events-none absolute inset-x-0 top-20 z-10 mx-auto flex max-w-7xl items-center justify-end px-5 md:top-24 md:px-8">
           <div className="hidden font-mono text-[10px] uppercase text-white/[0.42] md:block">
             ANITE / AI MOTION / 51.5072 N
           </div>

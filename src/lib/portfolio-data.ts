@@ -16,7 +16,7 @@ export const projects = [
   },
   {
     code: "02",
-    title: "Prompted VFX Experiments",
+    title: "VFX Prompts",
     description: "Special VFX effects created through prompt-led generation, compositing, and controlled visual direction.",
     src: "https://play.gumlet.io/embed/69edc7524779ed7c8b7511db",
     aspectRatio: "43 / 24",
